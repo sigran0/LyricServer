@@ -4,17 +4,19 @@ Lyric REST API Server
 
 This application is Lyric RESTFULL API Server
 
-useage: ```localhost/api/songs?start_index={...}&limit={...}&artist_id={...}&genre={...}&artist={...}&title={...}&start_date={...}&end_date={...}&title_in={...}&lyric_in```
+useage: ```localhost/api/songs?{params}```
 
 each parameters can be skipped and can search complex parameter
 
-start_index : start index in the database
-limit : limit of request data length
-artist_id : search by artist_id
-genre : search by genre
-artist : search by artist name
-title : search by title
-start_date : search by start_date with timestamp
-end_date : search by end_date with timestamp, default: Date.now()
-title_in : search by substring in the title
-lyric_in : search by substring in the lyric
+##parameter list
+
+1. start_index : start index in the database
+2. limit : limit of request data length
+3. artist_id : search by artist_id
+4. genre : search by genre
+5. artist : search by artist name
+6. title : search by title
+7. start_date : search by start_date with timestamp
+8. end_date : search by end_date with timestamp, default: Date.now()
+9. title_in : search by substring in the title
+10. lyric_in : search by substring in the lyric
