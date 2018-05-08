@@ -2,7 +2,7 @@
 Lyric REST API Server
 =============
 
-This application is Lyric RESTFULL API Server
+This application is Lyric RESTFULL API Serve
 
 useage: ```localhost/api/songs?{params}```
 

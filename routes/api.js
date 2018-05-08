@@ -23,6 +23,7 @@ router.get('/songs', (req, res) => {
     let end_date = req.query.end_date || Date.now();
     let title_in = req.query.title_in || null;
     let lyric_in = req.query.lyric_in || null;
+    let order = req.query.order || '1';
 
     let query = Song.find();
 
@@ -45,9 +46,17 @@ router.get('/songs', (req, res) => {
         query = query.where('song_info.lyric').regex(lyric_in);
 
     if(start_date != null)
-        query = query.gte('song_info.release_date', start_date)
-                     .lte('song_info.release_date', end_date)
-                     .sort('song_info.release_date');
+        query = query.gte('song_info.release_date', start_date);
+
+    if(end_date != null){
+        //  이렇게 할 필요는 없지만 미관상 놔둔다 -_-
+        let str = 'song_info.release_date';
+        if(order === '1')
+            str = '-' + str;
+
+        query = query.lte('song_info.release_date', end_date)
+                     .sort(str);
+    }
 
     query.skip(start_index)
         .limit(limit)
