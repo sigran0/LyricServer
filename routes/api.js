@@ -11,6 +11,47 @@ router.get('/', (req, res) => {
     })
 });
 
+router.post('/songs', (req, res) => {
+
+    let artist_id = req.body.artist_id;
+    let song_id = req.body.song_id;
+    let artist = req.body.song_info.artist;
+    let title = req.body.song_info.title;
+    let album = req.body.song_info.album;
+    let release_date = req.body.song_info.release_date;
+    let genre = req.body.song_info.genre;
+    let lyric = req.body.song_info.lyric;
+    
+    let song = new Song({
+        artist_id: artist_id,
+        song_id: song_id,
+        song_info: {
+            artist: artist,
+            title: title,
+            album: album,
+            release_date: release_date,
+            genre: genre,
+            lyric: lyric
+        }
+    });
+
+    song.save()
+        .then(() => {
+            res.json({
+                status: 200,
+                message: 'success',
+                data: None
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                status: 500,
+                message: err,
+                data: null
+            });
+        });
+});
+
 router.get('/songs', (req, res) => {
 
     let start_index = req.query.start || 0;
@@ -49,7 +90,7 @@ router.get('/songs', (req, res) => {
     if(lyric_in != null)
         query = query.where('song_info.lyric').regex(lyric_in);
 
-    if(start_date != null)
+    if(start_date != null) 
         query = query.gte('song_info.release_date', start_date);
 
     if(end_date != null){
