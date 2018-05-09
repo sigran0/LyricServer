@@ -23,12 +23,16 @@ router.get('/songs', (req, res) => {
     let end_date = req.query.end_date || Date.now();
     let title_in = req.query.title_in || null;
     let lyric_in = req.query.lyric_in || null;
+    let song_id = req.query.song_id || null;
     let order = req.query.order || '1';
 
     let query = Song.find();
 
     if(artist_id !== null)
         query = query.where('artist_id').equals(artist_id);
+
+    if(song_id != null)
+        query = query.where('song_id').equals(song_id);
 
     if(genre != null)
         query = query.where('song_info.genre').equals(genre);
