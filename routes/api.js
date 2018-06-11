@@ -90,32 +90,41 @@ router.get('/morphs', (req, res) => {
 
     let start_index = req.query.start || 0;
     let limit = req.query.limit || 50;
-    let artist_id = req.query.artist_id || null;
-    let song_id = req.query.song_id || null;
+    let genre = req.query.genre || null;
+    let artist = req.query.artist || null;
 
-    let query = Morphs.find();
+    let songQuery = Song.find();
+    let morphsQuery = Morphs.find();
 
-    if(artist_id !== null)
-        query = query.where('artist_id').equals(artist_id);
+    if(genre !== null)
+        songQuery = songQuery.where('song_info.genre').equals(genre);
 
-    if(song_id != null)
-        query = query.where('song_id').equals(song_id);
+    if(artist !== null)
+        songQuery = songQuery.where('song_info.artist').equals(artist);
 
-    query.skip(start_index)
+    songQuery.select('song_id').select('artist_id').select('-_id');
+
+    songQuery
+        .skip(start_index)
         .limit(limit)
-        .then((data) => {
+        .then((song_datas) => {
+
+            let song_id_list = song_datas.map((data) => {
+                return data.song_id;
+            });
+
+            morphsQuery.where('song_id').equals(song_id_list);
+
+            return morphsQuery;
+        })
+        .then((morphs_datas) => {
+
+            console.log(morphs_datas.length);
             res.json({
                 status: 200,
                 message: 'success',
-                data: data
-            });
-        })
-        .catch((err) => {
-            res.status(500).json({
-                status: 500,
-                message: err,
-                data: null
-            });
+                data: morphs_datas
+            })
         });
 });
 
@@ -173,6 +182,7 @@ router.get('/songs', (req, res) => {
     query.skip(start_index)
         .limit(limit)
         .then((data) => {
+            console.log(data.length);
             res.json({
                 status: 200,
                 message: 'success',
